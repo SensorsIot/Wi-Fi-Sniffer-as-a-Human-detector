@@ -17,7 +17,7 @@ This software is based on the work of Ray Burnette: https://www.hackster.io/rayb
 
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
-#include <credentials.h>
+// #include <credentials.h>
 #include <set>
 #include <string>
 #include "./functions.h"
@@ -41,6 +41,11 @@ char jsonString[JBUFFER];
 String device[MAXDEVICES];
 int nbrDevices = 0;
 int usedChannels[15];
+
+#ifndef CREDENTIALS
+#define mySSID "*****"
+#define myPASSWORD "******"
+#endif
 
 StaticJsonBuffer<JBUFFER>  jsonBuffer;
 
