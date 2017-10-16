@@ -8,7 +8,7 @@ PubSubClient client(espClient);
 // MQTT
 const char* mqttServer = "192.168.0.203";
 
-
+/*
 
 void callback(char* topic, byte * payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -52,5 +52,5 @@ void reconnect() {
   }
 }
 
-
+*/
 
