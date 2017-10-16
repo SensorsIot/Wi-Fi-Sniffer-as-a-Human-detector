@@ -66,7 +66,7 @@ void setup() {
 
 
 void loop() {
-  channel = 7;
+  channel = 1;
   boolean sendMQTT = false;
   wifi_set_channel(channel);
   while (true) {
@@ -74,7 +74,7 @@ void loop() {
     if (nothing_new > 200) {                // monitor channel for 200 ms
       nothing_new = 0;
       channel++;
-      if (channel == 8) break;             // Only scan channels 1 to 14
+      if (channel == 15) break;             // Only scan channels 1 to 14
       wifi_set_channel(channel);
     }
     delay(1);  // critical processing timeslice for NONOS SDK! No delay(0) yield()
