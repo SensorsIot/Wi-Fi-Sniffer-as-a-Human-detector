@@ -1,0 +1,234 @@
+[
+    {
+        "id": "bdb73754.3f46c8",
+        "type": "tab",
+        "label": "Sniffer",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "81145b4b.21e488",
+        "type": "mqtt in",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "topic": "Sniffer/#",
+        "qos": "0",
+        "broker": "d0e87662.1eee38",
+        "x": 67,
+        "y": 156,
+        "wires": [
+            [
+                "e84ae9d6.b78d18",
+                "f2d7fd4d.ca7ba"
+            ]
+        ]
+    },
+    {
+        "id": "e84ae9d6.b78d18",
+        "type": "json",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "pretty": true,
+        "x": 256,
+        "y": 155,
+        "wires": [
+            [
+                "ec9fd515.af4028",
+                "f2074bc4.94ab08",
+                "1646c486.3d80bb",
+                "4c415955.46bbe8"
+            ]
+        ]
+    },
+    {
+        "id": "ec9fd515.af4028",
+        "type": "function",
+        "z": "bdb73754.3f46c8",
+        "name": "Search",
+        "func": "\nvar knownDevices=[\n\"00:c0:ca:82:ee:8c\",\n\"00:e0:4c:53:44:58\",\n\"00:0f:04:b2:89:5f\",\n\"02:63:bd:d2:05:81\",\n\"12:3a:b4:60:a9:c3\",\n\"12:67:0d:6b:6c:c3\",\n\"1a:2c:b1:b5:7d:16\",\n\"1e:fe:8e:5a:7f:f6\",\n\"24:0a:c4:0d:90:6d\",\n\"2c:59:e5:e7:ce:f6\",\n\"4a:d0:2f:e1:58:f5\",\n\"4c:cc:6a:ff:70:57\",\n\"52:a4:df:6a:b7:99\",\n\"54:67:51:2a:49:22\",\n\"56:67:11:29:f9:bd\",\n\"5c:cf:7f:d7:22:2b\",\n\"5c:cf:7f:d7:1c:b5\",\n\"5c:cf:7f:c1:6b:e0\",\n\"60:01:94:07:0c:ad\",\n\"60:f4:45:c5:ab:44\",\n\"60:fe:c5:c2:4c:d2\",\n\"62:24:c2:f1:be:ea\",\n\"6c:b0:ce:2a:56:a8\",\n\"68:54:fd:a1:51:81\",\n\"6a:fe:e8:f0:10:9f\",\n\"6e:2f:ba:15:4a:e2\",\n\"70:62:b8:6c:85:24\",\n\"70:62:b8:6c:85:25\",\n\"76:5e:6c:af:56:66\",\n\"7e:7a:c0:12:29:78\",\n\"7e:d1:1c:a2:27:ee\",\n\"90:b6:86:c4:ba:9e\",\n\"9a:a4:ef:a7:c9:d7\",\n\"a4:8d:ee:ec:b2:c2\",\n\"b6:e6:d2:de:af:c1\",\n\"b8:27:eb:22:d9:40\",\n\"c6:3f:28:66:d9:a3\",\n\"d0:c5:f3:b3:5d:45\",\n\"d2:fe:31:d1:3c:9d\",\n\"de:b2:ce:75:db:72\",\n\"e4:a7:a0:13:b7:2b\",\n\"e6:e7:b4:69:16:34\",\n\"ea:ed:cd:76:5c:8e\",\n\"ec:ad:b8:6a:a3:d9\",\n\"ee:fe:37:da:9e:aa\",\n\"f8:16:54:d2:8f:b6\"\n\n];\nvar newDevice=false;\nfor ( i=0;i<msg.payload.MAC.length;i++){\n    if (knownDevices.indexOf(msg.payload.MAC[i])<0){\n        newDevice=true;\n        deviceMac=msg.payload.MAC[i];\n    }\n}\n\nif (newDevice){\n    msg.payload=deviceMac;\n    return msg;\n}\n// else msg.payload=\"\";\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 458,
+        "y": 157,
+        "wires": [
+            [
+                "b57527fe.4cb338",
+                "68a2d5a5.035c8c"
+            ]
+        ]
+    },
+    {
+        "id": "10d81e24.dcfca2",
+        "type": "http request",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://maker.ifttt.com/trigger/Intruder/with/key/cCce-uJEdHBwVVkCGDntH7",
+        "tls": "",
+        "x": 829,
+        "y": 151,
+        "wires": [
+            [
+                "adccb917.869768"
+            ]
+        ],
+        "outputLabels": [
+            "{ \"value1\" : \"\", \"value2\" : \"\", \"value3\" : \"\" }"
+        ]
+    },
+    {
+        "id": "adccb917.869768",
+        "type": "debug",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 991,
+        "y": 78,
+        "wires": []
+    },
+    {
+        "id": "68a2d5a5.035c8c",
+        "type": "switch",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "\"nix Neues\"",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 2,
+        "x": 648,
+        "y": 154,
+        "wires": [
+            [
+                "10d81e24.dcfca2"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "b57527fe.4cb338",
+        "type": "debug",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 654,
+        "y": 71,
+        "wires": []
+    },
+    {
+        "id": "f2074bc4.94ab08",
+        "type": "function",
+        "z": "bdb73754.3f46c8",
+        "name": "Andi",
+        "func": "if (msg.payload.MAC.indexOf(\"d0:c5:f3:b3:5d:45\")>0)\n    msg.payload=msg.payload=\"Andreas here\";\nelse\n    msg.payload=\"Andreas out\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 438,
+        "y": 282,
+        "wires": [
+            [
+                "3a25ee25.1b5602"
+            ]
+        ]
+    },
+    {
+        "id": "1646c486.3d80bb",
+        "type": "debug",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 403,
+        "y": 398,
+        "wires": []
+    },
+    {
+        "id": "f2d7fd4d.ca7ba",
+        "type": "debug",
+        "z": "bdb73754.3f46c8",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 213,
+        "y": 453,
+        "wires": []
+    },
+    {
+        "id": "4c415955.46bbe8",
+        "type": "function",
+        "z": "bdb73754.3f46c8",
+        "name": "Marwin",
+        "func": "if (msg.payload.MAC.indexOf(\"90:b6:86:c4:ba:9e\")>0)\n    msg.payload=msg.payload=\"Marwin here\";\nelse\n    msg.payload=\"Marwin out\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 445,
+        "y": 341,
+        "wires": [
+            [
+                "eac6a4a.061a158"
+            ]
+        ]
+    },
+    {
+        "id": "eac6a4a.061a158",
+        "type": "function",
+        "z": "bdb73754.3f46c8",
+        "name": "Status",
+        "func": "if (msg.payload==\"Marwin out\") node.status({fill:\"red\",shape:\"ring\",text:msg.payload});\nelse node.status({fill:\"green\",shape:\"ring\",text:msg.payload});    \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 623,
+        "y": 345,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a25ee25.1b5602",
+        "type": "function",
+        "z": "bdb73754.3f46c8",
+        "name": "Status",
+        "func": "if (msg.payload==\"Andreas out\") node.status({fill:\"red\",shape:\"ring\",text:msg.payload});\nelse node.status({fill:\"green\",shape:\"ring\",text:msg.payload});    \nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 623,
+        "y": 276,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0e87662.1eee38",
+        "type": "mqtt-broker",
+        "z": "",
+        "broker": "192.168.0.203",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": ""
+    }
+]
