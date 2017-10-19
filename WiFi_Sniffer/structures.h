@@ -135,6 +135,19 @@ struct clientinfo parse_data(uint8_t *frame, uint16_t framelen, signed rssi, uns
   return ci;
 }
 
+struct clientinfo parse_probe(uint8_t *frame, uint16_t framelen, signed rssi)
+{
+  struct clientinfo pi;
+  pi.channel = -1;
+  pi.err = 0;
+  pi.rssi = rssi;
+  struct sniffer_buf2 *sniffer = (struct sniffer_buf2*) frame;
+  memset(pi.bssid,0xFF,ETH_MAC_LEN);
+  memcpy(pi.station, frame + 10, ETH_MAC_LEN);
+  if ((pi.station[0] & 2) == 2) pi.channel=-2; // Randomised MAC !
+  return pi;
+}
+
 struct beaconinfo parse_beacon(uint8_t *frame, uint16_t framelen, signed rssi)
 {
   struct beaconinfo bi;
