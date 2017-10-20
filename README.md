@@ -9,12 +9,3 @@ Things to do before you start:
 - The mqtt topic is Sniffer/#
 
 You find a sample Node-Red flow. Just copy-paste the raw file into your Node-Red
-
-
-# Dependencies
-
-Install using the Library Manager in Arduino:
-- ESP8266
-- ArduinoJson
-- PubSubClient
-
