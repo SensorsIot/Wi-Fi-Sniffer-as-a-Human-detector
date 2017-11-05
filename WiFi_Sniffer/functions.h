@@ -68,7 +68,7 @@ int register_beacon(beaconinfo beacon)
   return known;
 }
 
-int register_client(clientinfo ci) {
+int register_client(clientinfo &ci) {
   int known = 0;   // Clear known flag
   for (int u = 0; u < clients_known_count; u++)
   {
@@ -79,6 +79,10 @@ int register_client(clientinfo ci) {
       break;
     }
   }
+
+  //Uncomment the line below to disable collection of probe requests from randomised MAC's
+  //if (ci.channel == -2) known = 1; // This will disable collection of probe requests from randomised MAC's
+  
   if (! known) {
     ci.lastDiscoveredTime = millis();
     // search for Assigned AP
@@ -137,26 +141,26 @@ String print_client(clientinfo ci)
     Serial.print(formatMac1(ci.station));  //Mac of device
     Serial.printf(" ==> ");
 
-    for (u = 0; u < aps_known_count; u++)
-    {
-      if (! memcmp(aps_known[u].bssid, ci.bssid, ETH_MAC_LEN)) {
-        //       Serial.print("   ");
-        //        Serial.printf("[%32s]", aps_known[u].ssid);   // Name of connected AP
-        known = 1;     // AP known => Set known flag
-        break;
-      }
-    }
-
-    if (! known)  {
-      Serial.printf("   Unknown/Malformed packet \r\n");
-      for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.bssid[i]);
-    } else {
-      //    Serial.printf("%2s", " ");
-
+//    for (u = 0; u < aps_known_count; u++)
+//    {
+//      if (! memcmp(aps_known[u].bssid, ci.bssid, ETH_MAC_LEN)) {
+//        //       Serial.print("   ");
+//        //        Serial.printf("[%32s]", aps_known[u].ssid);   // Name of connected AP
+//        known = 1;     // AP known => Set known flag
+//        break;
+//      }
+//    }
+//
+//    if (! known)  {
+//      Serial.printf("   Unknown/Malformed packet \r\n");
+//      for (int i = 0; i < 6; i++) Serial.printf("%02x", ci.bssid[i]);
+//    } else {
+//      //    Serial.printf("%2s", " ");
+      
       Serial.print(formatMac1(ci.ap));   // Mac of connected AP
-      Serial.printf("  % 3d", aps_known[u].channel);  //used channel
+      Serial.printf("  % 3d", ci.channel);  //used channel
       Serial.printf("   % 4d\r\n", ci.rssi);
-    }
+//    }
   }
   return hi;
 }
@@ -169,10 +173,20 @@ void promisc_cb(uint8_t *buf, uint16_t len)
     struct RxControl *sniffer = (struct RxControl*) buf;
   } else if (len == 128) {
     struct sniffer_buf2 *sniffer = (struct sniffer_buf2*) buf;
-    struct beaconinfo beacon = parse_beacon(sniffer->buf, 112, sniffer->rx_ctrl.rssi);
-    if (register_beacon(beacon) == 0) {
-      print_beacon(beacon);
-      nothing_new = 0;
+    if ((sniffer->buf[0] == 0x80)) {
+      struct beaconinfo beacon = parse_beacon(sniffer->buf, 112, sniffer->rx_ctrl.rssi);
+      if (register_beacon(beacon) == 0) {
+        print_beacon(beacon);
+        nothing_new = 0;
+      }
+    } else if ((sniffer->buf[0] == 0x40)) {
+      struct clientinfo ci = parse_probe(sniffer->buf, 36, sniffer->rx_ctrl.rssi);
+      //if (memcmp(ci.bssid, ci.station, ETH_MAC_LEN)) {
+        if (register_client(ci) == 0) {
+          print_client(ci);
+          nothing_new = 0;
+        }
+      //}
     }
   } else {
     struct sniffer_buf *sniffer = (struct sniffer_buf*) buf;
