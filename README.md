@@ -15,6 +15,5 @@ You find a sample Node-Red flow. Just copy-paste the raw file into your Node-Red
 
 Install using the Library Manager in Arduino:
 - ESP8266
-- ArduinoJson
-- PubSubClient
-
+- ArduinoJson ( https://bblanchon.github.io/ArduinoJson/ )
+- PubSubClient ( https://pubsubclient.knolleary.net )
