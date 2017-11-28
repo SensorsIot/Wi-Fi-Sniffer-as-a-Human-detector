@@ -147,7 +147,7 @@ void showDevices() {
   Serial.println("");
   Serial.println("");
   Serial.println("-------------------Device DB-------------------");
-  Serial.println(aps_known_count + clients_known_count);
+  Serial.printf("%4d Devices + Clients.\n",aps_known_count + clients_known_count); // show count
 
   // show Beacons
   for (int u = 0; u < aps_known_count; u++) {
