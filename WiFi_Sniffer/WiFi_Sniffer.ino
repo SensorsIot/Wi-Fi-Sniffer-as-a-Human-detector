@@ -222,7 +222,7 @@ void sendDevices() {
   if (client.publish("Sniffer", jsonString) == 1) Serial.println("Successfully published");
   else {
     Serial.println();
-    Serial.println("!!!!! Not published. please add #define MQTT_MAX_PACKET_SIZE 2048 at the beginning of pubSubClient.h file");
+    Serial.println("!!!!! Not published. Please add #define MQTT_MAX_PACKET_SIZE 2048 at the beginning of PubSubClient.h file");
     Serial.println();
   }
   client.loop();
