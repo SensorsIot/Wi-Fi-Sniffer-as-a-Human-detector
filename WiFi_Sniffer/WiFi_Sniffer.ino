@@ -149,8 +149,9 @@ void showDevices() {
   Serial.println("-------------------Device DB-------------------");
   Serial.println(aps_known_count + clients_known_count);
 
-  // add Beacons
+  // show Beacons
   for (int u = 0; u < aps_known_count; u++) {
+    Serial.printf( "%4d ",u); // Show beacon number
     Serial.print("B ");
     Serial.print(formatMac1(aps_known[u].bssid));
     Serial.print(" RSSI ");
@@ -159,8 +160,9 @@ void showDevices() {
     Serial.println(aps_known[u].channel);
   }
 
-  // add Clients
+  // show Clients
   for (int u = 0; u < clients_known_count; u++) {
+    Serial.printf("%4d ",u); // Show client number
     Serial.print("C ");
     Serial.print(formatMac1(clients_known[u].station));
     Serial.print(" RSSI ");
@@ -184,7 +186,7 @@ void sendDevices() {
       Serial.println("connected");
     } else {
       Serial.print("failed with state ");
-      Serial.print(client.state());
+      Serial.println(client.state());
     }
     yield();
   }
