@@ -47,7 +47,7 @@ int usedChannels[15];
 #define myPASSWORD "******"
 #endif
 
-StaticJsonBuffer<JBUFFER>  jsonBuffer;
+StaticJsonDocument<JBUFFER>  jsonBuffer;
 
 void setup() {
   Serial.begin(115200);
@@ -178,6 +178,7 @@ void sendDevices() {
   // Setup MQTT
   wifi_promiscuous_enable(disable);
   connectToWiFi();
+  client.setBufferSize(2048); // Avoids tampering with PubSubClient.h
   client.setServer(mqttServer, 1883);
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
@@ -193,8 +194,7 @@ void sendDevices() {
 
   // Purge json string
   jsonBuffer.clear();
-  JsonObject& root = jsonBuffer.createObject();
-  JsonArray& mac = root.createNestedArray("MAC");
+  JsonArray mac = jsonBuffer.createNestedArray("MAC");
   // JsonArray& rssi = root.createNestedArray("RSSI");
 
   // add Beacons
@@ -217,8 +217,8 @@ void sendDevices() {
 
   Serial.println();
   Serial.printf("number of devices: %02d\n", mac.size());
-  root.prettyPrintTo(Serial);
-  root.printTo(jsonString);
+  serializeJsonPretty(jsonBuffer,Serial);
+  serializeJson(jsonBuffer,jsonString);
   //  Serial.println((jsonString));
   //  Serial.println(root.measureLength());
   if (client.publish("Sniffer", jsonString) == 1) Serial.println("Successfully published");
