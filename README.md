@@ -7,8 +7,11 @@
 ![ESP8266](https://img.shields.io/badge/ESP8266-Supported-green?logo=espressif)
 ![Arduino](https://img.shields.io/badge/Arduino-Compatible-00979D?logo=arduino)
 ![MQTT](https://img.shields.io/badge/MQTT-Enabled-purple?logo=eclipsemosquitto)
+![2.4GHz](https://img.shields.io/badge/2.4GHz-Only-orange)
 
 Detect human presence by sniffing Wi-Fi probe requests from smartphones and other devices.
+
+> ⚠️ **Note:** ESP8266 only supports 2.4GHz Wi-Fi. 5GHz networks are not supported.
 
 📺 **Video Tutorial:** https://www.youtube.com/watch?v=fmhjtzmLrg8
 
@@ -26,12 +29,16 @@ Install using the Library Manager in Arduino IDE:
 
 Before uploading, update these settings:
 
-### 📡 MQTT Settings (`mqtt.h`)
+### 📡 MQTT Settings
 
+In `mqtt.h`, set your broker IP:
 ```cpp
 mqttServer = "192.168.0.100";  // Your MQTT broker IP
-MQTT_USERNAME = "admin";        // Your MQTT username
-MQTT_KEY = "admin";             // Your MQTT password
+```
+
+In `WiFi_Sniffer.ino` (line 186), update the MQTT credentials:
+```cpp
+client.connect("ESP32Client", "your-username", "your-password")
 ```
 
 ### 📶 WiFi Settings (`WiFi_Sniffer.ino`)
